@@ -43,10 +43,6 @@ class PurpleMagnet(Piece):
 
         iron_positions = vertical_iron_positions + horizontal_iron_positions
 
-        def are_iron_pieces_adjacent(pos1, pos2):
-            return (pos1[0] == pos2[0] and abs(pos1[1] - pos2[1]) == 1) or \
-                (pos1[1] == pos2[1] and abs(pos1[0] - pos2[0]) == 1)
-
         pushed_positions = set()
 
         for i in range(len(iron_positions)):
@@ -54,58 +50,6 @@ class PurpleMagnet(Piece):
 
             if (iron_x, iron_y) in pushed_positions:
                 continue
-
-            if i < len(iron_positions) - 1:
-                next_iron_x, next_iron_y = iron_positions[i + 1]
-
-                if are_iron_pieces_adjacent((iron_x, iron_y), (next_iron_x, next_iron_y)):
-                    if iron_y == next_iron_y:
-                        print("same column")
-                        direction = -1 if iron_x < new_x else 1
-                        target_y = iron_y
-                        first_target_x = next_iron_x + direction
-                        second_target_x = iron_x + direction
-
-                        if board.is_within_bounds(iron_x, target_y) and \
-                                ((board.grid[first_target_x][target_y].piece is None) or (
-                                        board.grid[second_target_x][target_y].piece is None)) and \
-                                ((board.is_cell_movable(first_target_x, target_y)) or (
-                                        board.is_cell_movable(second_target_x, target_y))):
-                            print(f"Pushing Iron piece at ({next_iron_x}, {iron_y}) to ({first_target_x}, {target_y})")
-                            board.grid[first_target_x][target_y].piece = board.grid[next_iron_x][iron_y].piece
-                            board.grid[next_iron_x][iron_y].piece = None
-
-                            print(f"Pushing Iron piece at ({iron_x}, {iron_y}) to ({second_target_x}, {target_y})")
-                            board.grid[next_iron_x][iron_y].piece = board.grid[iron_x][iron_y].piece
-                            board.grid[iron_x][iron_y].piece = None
-
-                            pushed_positions.add((iron_x, iron_y))
-                            pushed_positions.add((next_iron_x, next_iron_y))
-                            break
-
-                    if iron_x == next_iron_x:
-                        print("same row")
-                        direction = -1 if iron_y < new_y else 1
-                        target_x = iron_x
-                        first_target_y = next_iron_y + direction
-                        second_target_y = iron_y + direction
-
-                        if board.is_within_bounds(target_x, iron_y) and \
-                                ((board.grid[target_x][first_target_y].piece is None) or (
-                                        board.grid[target_x][second_target_y].piece is None)) and \
-                                ((board.is_cell_movable(target_x, first_target_y)) or (
-                                        board.is_cell_movable(target_x, second_target_y))):
-                            print(f"Pushing Iron piece at ({iron_x}, {next_iron_y}) to ({target_x}, {first_target_y})")
-                            board.grid[target_x][first_target_y].piece = board.grid[iron_x][iron_y].piece
-                            board.grid[iron_x][next_iron_y].piece = None
-
-                            print(f"Pushing Iron piece at ({iron_x}, {iron_y}) to ({target_x}, {second_target_y})")
-                            board.grid[target_x][second_target_y].piece = board.grid[iron_x][iron_y].piece
-                            board.grid[iron_x][iron_y].piece = None
-
-                            pushed_positions.add((iron_x, iron_y))
-                            pushed_positions.add((next_iron_x, next_iron_y))
-                            break
 
             if iron_y < new_y:
                 target_y = iron_y - 1

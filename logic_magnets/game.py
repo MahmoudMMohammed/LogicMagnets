@@ -11,7 +11,6 @@ class LogicMagnetsGame:
 
     def play(self):
         current_board = self.board
-        current_board.print_board()
         self.previous_boards.append(current_board)
         while self.current_moves < self.allowed_moves:
             try:
@@ -21,7 +20,8 @@ class LogicMagnetsGame:
                 new_y = int(input("Enter new y coordinate: "))
                 piece = current_board.grid[x][y].piece
                 if piece:
-                    solved = self.board.move_piece(x, y, new_x, new_y)
+                    move = (x, y, new_x, new_y)
+                    solved = self.board.move_piece(move)
                     if solved:
                         print("Congratulations! You've solved the puzzle!")
                         break
