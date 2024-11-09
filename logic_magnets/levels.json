@@ -362,5 +362,18 @@
         "purple_magnet": [4, 0],
         "iron_pieces": [[0, 0], [1, 2], [3, 1], [4, 3]],
         "allowed_moves": 3
+    },
+
+    {
+        "_comment": "Level: custom",
+        "size": 3,
+        "solve_cells": [[1, 2]],
+        "non_movable_cells": [
+
+        ],
+        "red_magnet": null,
+        "purple_magnet": [2, 0],
+        "iron_pieces": [[1, 1]],
+        "allowed_moves": 100000000000000000000
     }
 ]

@@ -16,6 +16,17 @@ class Board:
     def __hash__(self):
         return hash(tuple(tuple(row) for row in self.grid))
 
+    def __str__(self):
+        return '\n'.join([
+            ' '.join([
+                '.' if cell.piece is None and cell.is_movable else
+                ' ' if not cell.is_movable else
+                type(cell.piece).__name__[0]
+                for cell in row
+            ])
+            for row in self.grid
+        ])
+
     def clone(self):
         return copy.deepcopy(self)
 
@@ -69,10 +80,12 @@ class Board:
     def is_within_bounds(self, x, y):
         return 0 <= x < self.size and 0 <= y < self.size
 
-    def move_piece(self, old_x, old_y, new_x, new_y):
+    def move_piece(self, move):
+        old_x, old_y, new_x, new_y = move
         if self.is_within_bounds(new_x, new_y) and self.is_cell_movable(new_x, new_y):
             self.grid[old_x][old_y].piece.move(self, new_x, new_y)
-            self.print_board()
+            print(self)
+            print()
             if self.is_solved(self):
                 return True
         else:
@@ -81,15 +94,17 @@ class Board:
     def is_cell_movable(self, x, y):
         return self.grid[x][y].is_movable
 
-    def print_board(self):
-        for row in self.grid:
-            print(' '.join([
-                '.' if cell.piece is None and cell.is_movable else
-                ' ' if not cell.is_movable else
-                type(cell.piece).__name__[0]
-                for cell in row
-            ]))
-        print()
+    def generate_all_possible_moves(self):
+        possible_moves = []
+        for x in range(self.size):
+            for y in range(self.size):
+                piece = self.grid[x][y].piece
+                if isinstance(piece, (RedMagnet, PurpleMagnet)):
+                    for new_x in range(self.size):
+                        for new_y in range(self.size):
+                            if (x != new_x or y != new_y) and self.grid[new_x][new_y].piece is None:
+                                possible_moves.append((x, y, new_x, new_y))
+        return possible_moves
 
     @staticmethod
     def is_solved(board):

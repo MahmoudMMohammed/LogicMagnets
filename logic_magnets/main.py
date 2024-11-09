@@ -1,4 +1,5 @@
 from logic_magnets.game import LogicMagnetsGame
+from logic_magnets.search_algos import brute_force_search, bfs_search, dfs_search
 import json
 
 
@@ -28,4 +29,10 @@ if __name__ == '__main__':
 
     game = LogicMagnetsGame(selected_level)
     print(f"Solve cells are: {selected_level['solve_cells']}")
-    game.play()
+    print(game.board)
+    # game.play()
+
+    print("Starting brute force search for all possible moves...")
+    all_states = brute_force_search(game.board)
+    bfs_search(game.board, all_states)
+    # dfs_search(game.board, all_states)
