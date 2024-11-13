@@ -1,6 +1,7 @@
 # Logic Magnets Puzzle Game
 
-This project is a puzzle game involving logic magnets and smart search algorithms to solve the puzzle. The game features different types of pieces including Red Magnets, Purple Magnets, and Iron Pieces, each with unique movement behaviors. The goal is to move the pieces on the board to reach a specified end state.
+The Logic Magnets Puzzle Game involves a grid-based board where various types of pieces interact according to specific movement rules. The main goal is to solve the puzzle by moving the pieces to achieve a specific arrangement.
+
 
 ## State Description
 
