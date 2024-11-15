@@ -1,5 +1,5 @@
 from logic_magnets.game import LogicMagnetsGame
-from logic_magnets.search_algos import brute_force_search, bfs_search, dfs_search
+from logic_magnets.search_algos import brute_force_search, bfs_search, dfs_search, ucs_search
 import json
 
 
@@ -34,5 +34,6 @@ if __name__ == '__main__':
 
     print("Starting brute force search for all possible moves...")
     all_states = brute_force_search(game.board)
-    bfs_search(game.board, all_states)
+    # bfs_search(game.board, all_states)
     # dfs_search(game.board, all_states)
+    ucs_search(game.board)

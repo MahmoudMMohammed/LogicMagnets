@@ -9,7 +9,13 @@
         "red_magnet": null,
         "purple_magnet": [2, 0],
         "iron_pieces": [[1, 2]],
-        "allowed_moves": 5
+        "allowed_moves": 5,
+        "costs": [
+        [1, 1, 1, 1],
+        [1, 1, 1, 100],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1]
+        ]
     },
 
     {
