@@ -1,4 +1,5 @@
 from collections import deque
+import heapq
 
 
 def brute_force_search(board):
@@ -88,5 +89,43 @@ def dfs_search(board, all_states):
                 visited.add(str(new_state))
                 stack.append((new_state, current_state, move))
                 predecessors[str(new_state)] = (current_state, move)
+    print("No solution found after exploring all states.")
+    return None
+
+
+def ucs_search(board):
+    initial_state = board.clone()
+    visited = set()
+    queue = [(0, initial_state, None, None)]  # (cost, state, previous_state, move)
+    visited.add(str(initial_state))
+    predecessors = {}
+
+    while queue:
+        current_cost, current_state, previous_state, move = heapq.heappop(queue)
+
+        if board.is_solved(current_state):
+            print("Solution found:")
+            solution_path = []
+            while current_state is not None:
+                solution_path.append((current_state, move))
+                current_state, move = predecessors.get(str(current_state), (None, None))
+            solution_path.reverse()
+            for state, move in solution_path:
+                if move:
+                    print(f"Move: {move}")
+                print(state)
+            return solution_path
+
+        moves = current_state.generate_all_possible_moves()
+        for move in moves:
+            new_state = current_state.clone()
+            new_state.move_piece(move)
+            new_cost = current_cost + new_state.cost
+
+            if str(new_state) not in visited:
+                visited.add(str(new_state))
+                heapq.heappush(queue, (new_cost, new_state, current_state, move))
+                predecessors[str(new_state)] = (current_state, move)
+
     print("No solution found after exploring all states.")
     return None

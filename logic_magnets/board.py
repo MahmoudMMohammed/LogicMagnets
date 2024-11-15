@@ -7,11 +7,15 @@ class Board:
     def __init__(self, config):
         self.size = config['size']
         self.grid = self.initialize_grid(config)
+        self.cost = 0
 
     def __eq__(self, other):
         if not isinstance(other, Board):
             return NotImplemented
         return self.grid == other.grid
+
+    def __lt__(self, other):
+        return self.cost < other.cost
 
     def __hash__(self):
         return hash(tuple(tuple(row) for row in self.grid))
@@ -75,6 +79,12 @@ class Board:
             else:
                 print(f"Warning: Iron piece at ({x}, {y}) is out of bounds.")
 
+        if 'costs' in config:
+            for x in range(self.size):
+                for y in range(self.size):
+                    if self.is_within_bounds(x, y):
+                        grid[x][y].cost = config['costs'][x][y]
+
         return grid
 
     def is_within_bounds(self, x, y):
@@ -84,6 +94,8 @@ class Board:
         old_x, old_y, new_x, new_y = move
         if self.is_within_bounds(new_x, new_y) and self.is_cell_movable(new_x, new_y):
             self.grid[old_x][old_y].piece.move(self, new_x, new_y)
+            self.cost += self.grid[new_x][new_y].cost
+            print(f"Cost: {self.cost}")
             print(self)
             print()
             if self.is_solved(self):
