@@ -26,6 +26,8 @@ def _brute_force_recursive(board, all_states, visited):
         _brute_force_recursive(new_board, all_states, visited)
 
 
+##########################################################################################################
+
 def bfs_search(board, all_states):
     visited = set()
     queue = deque([(all_states[0], None, None)])  # Each element is a tuple (state, previous_state, move)
@@ -62,6 +64,8 @@ def bfs_search(board, all_states):
     return None
 
 
+##########################################################################################################
+
 def dfs_search(board, all_states):
     visited = set()
     stack = [(all_states[0], None, None)]
@@ -93,6 +97,7 @@ def dfs_search(board, all_states):
     return None
 
 
+##########################################################################################################
 def ucs_search(board):
     initial_state = board.clone()
     visited = set()
@@ -129,3 +134,50 @@ def ucs_search(board):
 
     print("No solution found after exploring all states.")
     return None
+
+
+##########################################################################################################
+def hill_climbing(board):
+    initial_state = board.clone()
+    current_state = initial_state
+
+    while True:
+        neighbors = current_state.generate_all_possible_moves()
+
+        moves_with_costs = []
+
+        # Calculate the total cost (current_state.cost + move_cost) for each move
+        for move in neighbors:
+            new_state = current_state.clone()
+            new_state.move_piece(move)
+            total_cost = current_state.cost + new_state.cost
+            moves_with_costs.append((move, total_cost))
+            print(f"Move: {move}, Total cost: {total_cost}")
+
+        # Sort the moves based on the total cost (ascending order)
+        moves_with_costs.sort(key=lambda x: x[1])
+
+        # Start making moves from the lowest cost
+        next_state = None
+        for move, total_cost in moves_with_costs:
+            new_state = current_state.clone()
+            new_state.move_piece(move)
+            new_state.cost = total_cost
+
+            # Check if the state is solved
+            if board.is_solved(new_state):
+                print("Solution found:")
+                print(new_state)
+                return new_state
+
+            if total_cost < current_state.cost:
+                next_state = new_state
+                current_state = next_state
+                print(f"Making move: {move} with cost {total_cost}")
+                break
+
+        if next_state is None:
+            print("No better moves, reached local maximum.")
+            return current_state
+
+##########################################################################################################

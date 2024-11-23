@@ -42,11 +42,11 @@ Example configuration:
   "iron_pieces": [[1, 2]],
   "allowed_moves": 5,
   "costs": [
-        [1, 1, 1, 1],
-        [1, 1, 1, 100],
-        [1, 1, 1, 1],
-        [1, 1, 1, 1]
-        ]
+    [1, 1, 1, 1],
+    [1, 1, 1, 100],
+    [1, 1, 1, 1],
+    [1, 1, 1, 1]
+  ]
 }
 ```
 
@@ -83,6 +83,12 @@ The state space consists of all possible configurations of the board as pieces a
 ##### Description: Explores moves based on the cumulative cost of reaching each state. It always expands the least-cost node first, ensuring that the first solution found is the optimal one in terms of cost.
 
 ##### Function: ucs_search(board)
+
+### Hill Climbing:
+
+##### Description: A local search algorithm that explores moves by evaluating the cost of each move from the current state. It always selects the move with the lowest cost, aiming to improve the current state. If no better move is found, the algorithm terminates, potentially reaching a local maximum or the optimal solution.
+
+##### Function: hill_climbing(board)
 
 ## Additional Functions:
 
@@ -135,6 +141,8 @@ or
 all_states = brute_force_search(game.board)
 bfs_search(game.board, all_states)
 dfs_search(game.board, all_states)
+ucs_search(game.board)
+hill_climbing(game.board)
 ```
 
 ## Dependencies
