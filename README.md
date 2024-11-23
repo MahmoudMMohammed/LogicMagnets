@@ -2,6 +2,8 @@
 
 The Logic Magnets Puzzle Game involves a grid-based board where various types of pieces interact according to specific movement rules. The main goal is to solve the puzzle by moving the pieces to achieve a specific arrangement.
 
+
+
 ## State Description
 
 The board is represented as a grid where each cell can contain a piece. The pieces include:
