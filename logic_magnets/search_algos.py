@@ -137,43 +137,59 @@ def ucs_search(board):
 
 
 ##########################################################################################################
+def manhattan_distance(piece_position, target_position):
+    return abs(piece_position[0] - target_position[0]) + abs(piece_position[1] - target_position[1])
+
+
+def heuristic(state, solve_cells):
+    total_distance = 0
+    pieces = state.get_pieces()
+    for piece in pieces:
+        piece_position = (piece[0], piece[1])
+        min_distance = min(manhattan_distance(piece_position, solve_cell) for solve_cell in solve_cells)
+        total_distance += min_distance
+    return total_distance
+
+
+##########################################################################################################
+
 def hill_climbing(board):
     initial_state = board.clone()
     current_state = initial_state
 
     while True:
+        if board.is_solved(current_state):
+            print("Solution found:")
+            print(current_state)
+            return current_state
+
         neighbors = current_state.generate_all_possible_moves()
 
-        moves_with_costs = []
+        moves_with_heuristics = []
 
-        # Calculate the total cost (current_state.cost + move_cost) for each move
         for move in neighbors:
             new_state = current_state.clone()
             new_state.move_piece(move)
-            total_cost = current_state.cost + new_state.cost
-            moves_with_costs.append((move, total_cost))
-            print(f"Move: {move}, Total cost: {total_cost}")
+            heuristic_value = heuristic(new_state, board.get_solve_cells())
+            moves_with_heuristics.append((move, heuristic_value))
+            print(f"Move: {move}, Heuristic value: {heuristic_value}")
 
-        # Sort the moves based on the total cost (ascending order)
-        moves_with_costs.sort(key=lambda x: x[1])
+        moves_with_heuristics.sort(key=lambda x: x[1])
 
-        # Start making moves from the lowest cost
+        # Start making moves from the lowest heuristic value
         next_state = None
-        for move, total_cost in moves_with_costs:
+        for move, heuristic_value in moves_with_heuristics:
             new_state = current_state.clone()
             new_state.move_piece(move)
-            new_state.cost = total_cost
 
-            # Check if the state is solved
             if board.is_solved(new_state):
                 print("Solution found:")
                 print(new_state)
                 return new_state
 
-            if total_cost < current_state.cost:
+            if heuristic_value < heuristic(current_state, board.get_solve_cells()):
                 next_state = new_state
                 current_state = next_state
-                print(f"Making move: {move} with cost {total_cost}")
                 break
 
         if next_state is None:
