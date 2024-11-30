@@ -125,3 +125,19 @@ class Board:
                 if cell.is_solve_cell and cell.piece is None:
                     return False
         return True
+
+    def get_solve_cells(self):
+        solve_cells = []
+        for i, row in enumerate(self.grid):
+            for j, cell in enumerate(row):
+                if cell.is_solve_cell:
+                    solve_cells.append((i, j))
+        return solve_cells
+
+    def get_pieces(self):
+        pieces = []
+        for i, row in enumerate(self.grid):
+            for j, cell in enumerate(row):
+                if isinstance(cell.piece, (IronPiece, PurpleMagnet, RedMagnet)):
+                    pieces.append((i, j, cell.piece))
+        return pieces
